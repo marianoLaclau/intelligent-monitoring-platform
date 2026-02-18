@@ -1,0 +1,30 @@
+site_id: "sitio_demo"
+camera_id: "CAM01"
+source:
+  type: "file"
+  path: "videos/demo.mp4"
+
+detector:
+  model: "yolov8n.pt"
+  conf: 0.45
+  classes: ["person"]
+
+zones:
+  - id: "zona_prueba"
+    polygon: [[120,80],[540,70],[560,360],[140,380]]
+
+rules:
+  intrusion:
+    min_seconds_in_zone: 1.0
+    cooldown_seconds: 20
+
+evidence:
+  snapshot: true
+  out_dir: "outputs/evidence"
+
+notifier:
+  webhook_enabled: true
+  webhook_url: "http://localhost:5678/webhook/alertas"
+
+storage:
+  events_jsonl: "outputs/events/events.jsonl"

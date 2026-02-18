@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+.env
+video_env/
+env-monitoreo-smart/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs (no subir evidencia ni logs reales)
+outputs/evidence/*
+outputs/events/*
+outputs/logs/*
+!outputs/evidence/.gitkeep
+!outputs/events/.gitkeep
+!outputs/logs/.gitkeep
+!outputs/.gitkeep
+
+# Logs sueltos
+*.log
