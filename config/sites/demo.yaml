@@ -1,30 +1,54 @@
-site_id: "sitio_demo"
-camera_id: "CAM01"
-source:
-  type: "file"
-  path: "videos/demo.mp4"
+site_id: "demo-site"
+camera_id: "cam-01"
 
-detector:
+source:
+  type: "video_file"
+  path: "./videos/demo.mp4"
+  loop: true
+
+inference:
+  engine: "yolo"
   model: "yolov8n.pt"
-  conf: 0.45
-  classes: ["person"]
+  conf: 0.40
+  iou: 0.50
+  classes: [0]
+  imgsz: 640
+
+processing:
+  target_fps: 6
+  resize_width: 960
 
 zones:
   - id: "zona_prueba"
-    polygon: [[120,80],[540,70],[560,360],[140,380]]
+    polygon: [[200,140],[760,150],[820,470],[190,490]]
+
 
 rules:
   intrusion:
-    min_seconds_in_zone: 1.0
+    zone_id: "zona_prueba"
+    min_hits: 3
     cooldown_seconds: 20
 
 evidence:
-  snapshot: true
-  out_dir: "outputs/evidence"
-
-notifier:
-  webhook_enabled: true
-  webhook_url: "http://localhost:5678/webhook/alertas"
+  snapshot:
+    enabled: true
+    out_dir: "./out/snapshots"
 
 storage:
-  events_jsonl: "outputs/events/events.jsonl"
+  jsonl:
+    path: "./out/events.jsonl"
+
+notify:
+  webhook:
+    enabled: false
+    url: null
+    timeout_seconds: 5
+
+
+
+
+ui:
+  show_window: true
+  window_name: "MVP Monitor"
+  infer_every_n_frames: 2
+
