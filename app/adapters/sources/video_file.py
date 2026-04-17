@@ -13,7 +13,6 @@ class VideoFileSource:
     def open(self) -> None:
         if not os.path.exists(self.path):
             raise RuntimeError(f"Video no encontrado: {self.path} (cwd={os.getcwd()})")
-
         self.cap = cv2.VideoCapture(self.path)
         if not self.cap.isOpened():
             raise RuntimeError(f"No se pudo abrir el video: {self.path}")
@@ -30,22 +29,17 @@ class VideoFileSource:
         if self.cap is None:
             self.open()
         fps = float(self.cap.get(cv2.CAP_PROP_FPS) or 0.0)
-        return fps if fps > 0 else 25.0  # fallback razonable
+        return fps if fps > 0 else 25.0
 
     def frames(self) -> Iterator[Tuple[bool, any]]:
         if self.cap is None:
             self.open()
-
         while True:
             ok, frame = self.cap.read()
             if ok:
                 yield True, frame
                 continue
-
-            # EOF
             if not self.loop:
                 yield False, None
                 return
-
-            # loop
             self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)

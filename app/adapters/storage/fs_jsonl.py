@@ -11,6 +11,3 @@ class JsonlEventStore:
     def append(self, payload: dict) -> None:
         with open(self.path, "a", encoding="utf-8") as f:
             f.write(json.dumps(payload, ensure_ascii=False) + "\n")
-
-
-

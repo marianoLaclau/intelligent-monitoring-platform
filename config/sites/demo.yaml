@@ -1,3 +1,19 @@
+# ─────────────────────────────────────────────────────────────────────
+# Intelligent Monitoring Platform — Demo v6
+# ─────────────────────────────────────────────────────────────────────
+#
+# CÓMO FUNCIONA:
+#   - Video se muestra a 30fps (fluido, nunca se traba)
+#   - Inferencia corre en thread separado cada 3 frames (~10 img/s)
+#   - El tracker recibe imágenes cada ~100ms a 30fps
+#   - Una persona caminando se mueve ~15px en 100ms → matching OK
+#   - ReID habilitado para recuperar IDs tras oclusiones
+#
+# SI LOS IDs CAMBIAN:
+#   - Bajar infer_every_n_frames a 2 (tracker recibe ~15 img/s)
+#   - O bajar conf a 0.20
+#
+
 site_id: "demo-site"
 camera_id: "cam-01"
 
@@ -9,10 +25,26 @@ source:
 inference:
   engine: "yolo"
   model: "yolov8n.pt"
-  conf: 0.40
+  conf: 0.25
   iou: 0.50
   classes: [0]
   imgsz: 640
+
+tracking:
+  enabled: true
+  tracker: "botsort"
+  track_high_thresh: 0.3
+  track_low_thresh: 0.1
+  new_track_thresh: 0.4
+  match_thresh: 0.8
+  track_buffer: 150
+  with_reid: true
+  appearance_thresh: 0.25
+  proximity_thresh: 0.5
+  min_hits_enter: 3
+  max_misses_exit: 15
+  track_timeout_seconds: 30.0
+  dwell_alert_seconds: 60.0
 
 processing:
   target_fps: 6
@@ -20,14 +52,16 @@ processing:
 
 zones:
   - id: "zona_prueba"
-    polygon: [[200,140],[760,150],[820,470],[190,490]]
-
+    polygon: [[200, 140], [760, 150], [820, 470], [190, 490]]
+    zone_type: "restricted"
+    active: true
 
 rules:
   intrusion:
     zone_id: "zona_prueba"
     min_hits: 3
     cooldown_seconds: 20
+    dwell_alert_seconds: 60.0
 
 evidence:
   snapshot:
@@ -44,11 +78,10 @@ notify:
     url: null
     timeout_seconds: 5
 
-
-
-
 ui:
   show_window: true
-  window_name: "MVP Monitor"
-  infer_every_n_frames: 2
-
+  window_name: "MVP Monitor v6"
+  infer_every_n_frames: 3     # 3=fluido y estable, 2=más preciso, 1=CPU intensive
+  show_track_id: true
+  show_track_trail: true
+  trail_length: 30
