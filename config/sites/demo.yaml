@@ -19,7 +19,7 @@ camera_id: "cam-01"
 
 source:
   type: "video_file"
-  path: "./videos/demo.mp4"
+  path: "C:/Proyectos/monitoring-data/videos/demo.mp4"
   loop: true
 
 inference:
