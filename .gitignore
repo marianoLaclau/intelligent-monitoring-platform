@@ -1,31 +1,80 @@
-# Python
+$gitignore = @"
+# ═══════════════════════════════════════════════════════════════
+# .gitignore — intelligent-monitoring-platform
+# ═══════════════════════════════════════════════════════════════
+
+# ───── Python ─────
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
 
-# Virtual env
+# ───── Entornos virtuales ─────
 venv/
+.venv/
+env/
 .env
 video_env/
 env-monitoreo-smart/
 
-# IDE
+# ───── IDE / Editores ─────
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# OS
+# ───── Sistema operativo ─────
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Outputs (no subir evidencia ni logs reales)
+# ───── Outputs del proyecto (evidencia, logs) ─────
 outputs/evidence/*
 outputs/events/*
 outputs/logs/*
+outputs/snapshots/*
 !outputs/evidence/.gitkeep
 !outputs/events/.gitkeep
 !outputs/logs/.gitkeep
+!outputs/snapshots/.gitkeep
 !outputs/.gitkeep
 
-# Logs sueltos
+# ───── Videos de prueba y evidencia por sitio (NUNCA versionar) ─────
+config/sites/videos/
+config/sites/*/videos/
+config/sites/out/
+config/sites/*/out/
+config/sites/snapshots/
+config/sites/*/snapshots/
+
+# ───── Modelos de ML (descargables, no versionar) ─────
+*.pt
+*.onnx
+*.engine
+*.pth
+*.weights
+
+# ───── Config local por desarrollador (no compartir) ─────
+*.local.yaml
+*.local.yml
+.env.local
+
+# ───── Logs sueltos ─────
 *.log
+
+# ───── Backup del gitignore viejo ─────
+.gitignore.bak
+"@
+
+Set-Content -Path ".gitignore" -Value $gitignore -Encoding UTF8
+
+# Verificar
+Write-Host "`n=== .gitignore nuevo ===" -ForegroundColor Cyan
+Get-Content .gitignore
